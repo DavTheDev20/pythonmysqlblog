@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form onsubmit="submitPost(event)">
+    <input name="title" type="text" placeholder="enter title..."/>
+    <textarea name="content" placeholder="enter content" cols="30" rows="10"></textarea>
+    <input type="submit" value="Post" />
+</form>
+
+<hr />
+
+<div id="posts">
+    <h1>Posts</h1>
+    {% for post in posts %}
+        <div class="post">
+            <h2>{{post.title}}</h2>
+            <p>{{post.content}}</p>
+            <small>Posted on: {{post.date_posted.strftime('%a, %b %d %Y')}}</small>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

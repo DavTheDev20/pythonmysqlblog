@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Nunito', sans-serif;
+}
+
+
+form {
+    margin: 3% 0;
+}
+
+input, textarea {
+    display: block;
+    margin: 15px;
+    padding: 10px;
+    font-size: 1.05rem;
+}
+
+input[type="submit"] {
+    cursor: pointer;
+    width: 8%;
+}
+
+.post {
+    margin: 2.5% 1%;
+    border-bottom: 1px solid black;
+    padding-bottom: 15px;
+    width: 35%;
+    line-height: 1.25;
+}
+
+.post small {
+    color: #DDDDDD;
+}
+
+footer {
+    margin-top: 5%;
+}
