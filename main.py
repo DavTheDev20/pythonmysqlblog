@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
+load_dotenv()
+
 MYSQL_URI = os.getenv("MYSQL_URI")
 
 app = Flask(__name__)
