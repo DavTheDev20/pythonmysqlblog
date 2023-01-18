@@ -1,10 +1,14 @@
 import datetime
+import os
 
+from dotenv import load_dotenv
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
+MYSQL_URI = os.getenv("MYSQL_URI")
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:admindev23d!@localhost/PythonMySQLBlogDB'
+app.config['SQLALCHEMY_DATABASE_URI'] = MYSQL_URI
 db = SQLAlchemy(app)
 
 
