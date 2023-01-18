@@ -12,7 +12,8 @@ Run app with `python main.py`
 Steps to initiate app:
 1. Run `python -m venv venv` (to create new py-venv)
 2. On windows run `./venv/Scripts/activate` | On mac run `source ./venv/bin/activate`
-3. Run `python -m pip install -r requirements.txt` (to install all necessary dependencies)
+3. Add .env file to project with MYSQL_URI variable
+4. Run `python -m pip install -r requirements.txt` (to install all necessary dependencies)
 
 <hr />
 
