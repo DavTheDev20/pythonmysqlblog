@@ -10,10 +10,12 @@ load_dotenv()
 MYSQL_URI = os.getenv("MYSQL_URI")
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = MYSQL_URI
+# TODO: Rewrite Application with just SQLAlchemy not Flask-SQLAlchemy
+# Application currenlty does not work on Mac
+app.config["SQLALCHEMY_DATABASE_URI"] = MYSQL_URI
 db = SQLAlchemy(app)
 
-
+# type: ignore
 class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text)
@@ -28,17 +30,24 @@ def test_connection():
 
 def get_posts():
     posts_data = Posts.query.all()
-    posts = [{"id": post.id, "title": post.title, "content": post.content, "date_posted": post.date_posted} for post in
-             posts_data]
+    posts = [
+        {
+            "id": post.id,
+            "title": post.title,
+            "content": post.content,
+            "date_posted": post.date_posted,
+        }
+        for post in posts_data
+    ]
     return posts
 
 
-@app.route('/')
+@app.route("/")
 def index():
     return render_template("index.html", posts=get_posts())
 
 
-@app.route('/api/posts', methods=["GET", "POST"])
+@app.route("/api/posts", methods=["GET", "POST"])
 def posts_api():
     if request.method == "GET":
         posts = get_posts()
@@ -46,12 +55,19 @@ def posts_api():
     if request.method == "POST":
         try:
             request_data = request.json
-            new_post = Posts(title=request_data["title"], content=request_data["content"], date_posted=datetime.datetime.now())
+            new_post = Posts(
+                title=request_data["title"],
+                content=request_data["content"],
+                date_posted=datetime.datetime.now(),
+            )
             db.session.add(new_post)
             db.session.commit()
             return {"success": True, "msg": "Successfully added new post."}, 200
         except KeyError:
-            return {"success": False, "error": "Please include title and content in request body."}
+            return {
+                "success": False,
+                "error": "Please include title and content in request body.",
+            }
 
 
 if __name__ == "__main__":
