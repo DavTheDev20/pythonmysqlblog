@@ -1,31 +1,13 @@
 import datetime
-import os
+import traceback
 
-from dotenv import load_dotenv
 from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
-
-load_dotenv()
-
-MYSQL_URI = os.getenv("MYSQL_URI")
+from database import db_session, init_db
+from models import Posts
 
 app = Flask(__name__)
-# TODO: Rewrite Application with just SQLAlchemy not Flask-SQLAlchemy
-# Application currenlty does not work on Mac
-app.config["SQLALCHEMY_DATABASE_URI"] = MYSQL_URI
-db = SQLAlchemy(app)
 
-# type: ignore
-class Posts(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.Text)
-    content = db.Column(db.Text)
-    date_posted = db.Column(db.DateTime)
-
-
-def test_connection():
-    with app.app_context():
-        db.create_all()
+init_db()
 
 
 def get_posts():
@@ -60,14 +42,35 @@ def posts_api():
                 content=request_data["content"],
                 date_posted=datetime.datetime.now(),
             )
-            db.session.add(new_post)
-            db.session.commit()
+            db_session.add(new_post)
+            db_session.commit()
             return {"success": True, "msg": "Successfully added new post."}, 200
         except KeyError:
             return {
                 "success": False,
                 "error": "Please include title and content in request body.",
             }
+
+
+@app.route('/api/posts/<post_id>', methods=["GET", "PUT", "DELETE"])
+def manipulate_post(post_id):
+    if request.method == "GET":
+        post_data = db_session.query(Posts).get(post_id)
+        post = {"id": post_data.id, "title": post_data.title, "content": post_data.content, "date_posted": post_data.date_posted}
+        return {"success": True, "post": post}
+    elif request.method == "DELETE":
+        try:
+            post = db_session.query(Posts).get(post_id)
+            db_session.delete(post)
+            db_session.commit()
+            return {"success": True}
+        except Exception:
+            return {"success": False, "error": traceback.format_exc()}
+
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
 
 
 if __name__ == "__main__":

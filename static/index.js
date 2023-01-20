@@ -5,6 +5,10 @@ function submitPost(event) {
 
     const postData = {title: titleInput.value, content: contentInput.value};
 
+    if (!titleInput.value || !contentInput.value){
+        return alert("Error: Please enter title and content to submit post")
+    }
+
     fetch('http://localhost:5000/api/posts', {
         method: "POST",
         headers: {
@@ -21,4 +25,21 @@ function submitPost(event) {
         console.error(error);
         return alert("Something went wrong...")
     })
+}
+
+function handleDelete(post_id) {
+       fetch("http://localhost:5000/api/posts/" + post_id, {
+        method: "DELETE"
+       })
+       .then(res => {
+        if (res.status === 200) {
+            console.log(res);
+            window.location.reload();
+            return;
+        }
+       })
+       .catch(error => {
+        console.log(error);
+        return alert("Something went wrong...")
+       })
 }
