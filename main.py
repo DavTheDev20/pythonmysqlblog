@@ -2,10 +2,12 @@ import datetime
 import traceback
 
 from flask import Flask, render_template, request
+from flask_cors import CORS
 from database import db_session, init_db
 from models import Posts
 
 app = Flask(__name__)
+CORS(app)
 
 init_db()
 
