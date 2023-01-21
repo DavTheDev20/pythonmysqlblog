@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<h1>Welcome to Python MySQL Blog</h1>
+
 <form onsubmit="submitPost(event)">
     <input name="title" type="text" placeholder="enter title..."/>
     <textarea name="content" placeholder="enter content" cols="30" rows="10"></textarea>
@@ -15,7 +17,7 @@
     {% for post in posts %}
         <div class="post">
             <h2>{{post.title}}</h2>
-            <p>{{post.content}}</p>
+            <p>{{post.content[0:40] + "..."}} <a href="/post/{{post.id}}">Read More</a></p>
             <small>Posted on: {{post.date_posted.strftime('%a, %b %d %Y')}}</small>
             <br />
             <a style="color: red; cursor: pointer" onclick="handleDelete({{post.id}})">Delete Post</a>

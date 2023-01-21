@@ -13,6 +13,7 @@ init_db()
 
 
 def get_posts():
+    """Retrieves all posts from database and returns them in a list"""
     posts_data = Posts.query.all()
     posts = [
         {
@@ -26,9 +27,26 @@ def get_posts():
     return posts
 
 
+def get_post(post_id):
+    post_data = db_session.query(Posts).get(post_id)
+    if not post_data:
+        return {}
+    post = {"id": post_data.id, "title": post_data.title, "content": post_data.content,
+                 "date_posted": post_data.date_posted}
+    return post
+
+
 @app.route("/")
 def index():
     return render_template("index.html", posts=get_posts())
+
+
+@app.route("/post/<post_id>")
+def post(post_id):
+    post_data = get_post(post_id)
+    if not post_data:
+        return render_template("index.html", posts=get_posts())
+    return render_template("post.html", post=get_post(post_id))
 
 
 @app.route("/api/posts", methods=["GET", "POST"])
@@ -58,7 +76,8 @@ def posts_api():
 def manipulate_post(post_id):
     if request.method == "GET":
         post_data = db_session.query(Posts).get(post_id)
-        post = {"id": post_data.id, "title": post_data.title, "content": post_data.content, "date_posted": post_data.date_posted}
+        post = {"id": post_data.id, "title": post_data.title, "content": post_data.content,
+                "date_posted": post_data.date_posted}
         return {"success": True, "post": post}
     elif request.method == "DELETE":
         try:

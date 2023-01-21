@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div>
+        <h1>{{post.title}}</h1>
+        <small>Posted: {{post.date_posted.strftime("%B %d, %Y")}}</small>
+        <p>{{post.content}}</p>
+        <a href="/">Go Back</a>
+    </div>
+{% endblock %}
