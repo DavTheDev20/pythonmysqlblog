@@ -24,7 +24,7 @@ def get_posts():
         }
         for post in posts_data
     ]
-    return posts
+    return reversed(posts)
 
 
 def get_post(post_id):

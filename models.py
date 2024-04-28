@@ -6,8 +6,8 @@ class Posts(Base):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True)
-    title = Column(String)
-    content = Column(String)
+    title = Column(String(250))
+    content = Column(String(250))
     date_posted = Column(Date)
 
     def __init__(self, title=None, content=None, date_posted=None):
