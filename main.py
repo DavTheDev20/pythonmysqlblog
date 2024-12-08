@@ -17,12 +17,12 @@ def get_posts():
     posts_data = Posts.query.all()
     posts = [
         {
-            "id": post.id,
-            "title": post.title,
-            "content": post.content,
-            "date_posted": post.date_posted,
+            "id": _post.id,
+            "title": _post.title,
+            "content": _post.content,
+            "date_posted": _post.date_posted,
         }
-        for post in posts_data
+        for _post in posts_data
     ]
     return reversed(posts)
 
@@ -31,9 +31,9 @@ def get_post(post_id):
     post_data = db_session.query(Posts).get(post_id)
     if not post_data:
         return {}
-    post = {"id": post_data.id, "title": post_data.title, "content": post_data.content,
+    _post = {"id": post_data.id, "title": post_data.title, "content": post_data.content,
                  "date_posted": post_data.date_posted}
-    return post
+    return _post
 
 
 @app.route("/")
@@ -76,13 +76,13 @@ def posts_api():
 def manipulate_post(post_id):
     if request.method == "GET":
         post_data = db_session.query(Posts).get(post_id)
-        post = {"id": post_data.id, "title": post_data.title, "content": post_data.content,
+        _post = {"id": post_data.id, "title": post_data.title, "content": post_data.content,
                 "date_posted": post_data.date_posted}
-        return {"success": True, "post": post}
+        return {"success": True, "post": _post}
     elif request.method == "DELETE":
         try:
-            post = db_session.query(Posts).get(post_id)
-            db_session.delete(post)
+            _post = db_session.query(Posts).get(post_id)
+            db_session.delete(_post)
             db_session.commit()
             return {"success": True}
         except Exception:

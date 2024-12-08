@@ -31,6 +31,10 @@ input[type="submit"] {
     line-height: 1.25;
 }
 
+.post_content {
+    width: 35%;
+}
+
 .post small {
     color: #DDDDDD;
 }
